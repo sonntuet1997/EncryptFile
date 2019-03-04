@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="btl">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="new_schema"/>
+    <schema id="6" parent="1" name="performance_schema"/>
+    <schema id="7" parent="1" name="sys"/>
+    <table id="8" parent="2" name="employee"/>
+    <table id="9" parent="2" name="file"/>
+    <table id="10" parent="2" name="group"/>
+    <table id="11" parent="2" name="permission"/>
+    <table id="12" parent="2" name="role"/>
+    <table id="13" parent="2" name="route"/>
+    <table id="14" parent="2" name="subcribe"/>
+    <table id="15" parent="2" name="team"/>
+    <table id="16" parent="2" name="ticket"/>
+    <table id="17" parent="2" name="ticketattribute"/>
+    <table id="18" parent="2" name="ticketimage"/>
+    <table id="19" parent="2" name="ticketread"/>
+    <table id="20" parent="2" name="ticketrelater"/>
+    <table id="21" parent="2" name="ticketthread"/>
+    <table id="22" parent="2" name="token"/>
+    <table id="23" parent="2" name="user"/>
+    <column id="24" parent="8" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="25" parent="8" name="email">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="8" name="name">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="8" name="teamId">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="28" parent="8" name="groupId">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="29" parent="8" name="briefName">
+      <Position>6</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <index id="30" parent="8" name="fk_employee_group1_idx">
+      <ColNames>groupId</ColNames>
+    </index>
+    <index id="31" parent="8" name="fk_employee_team1_idx">
+      <ColNames>teamId</ColNames>
+    </index>
+    <key id="32" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="33" parent="8" name="fk_employee_team1">
+      <ColNames>teamId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>team</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="34" parent="8" name="fk_employee_group1">
+      <ColNames>groupId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="35" parent="9" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="36" parent="9" name="data">
+      <Position>2</Position>
+      <DataType>blob|0</DataType>
+    </column>
+    <column id="37" parent="9" name="length">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="38" parent="9" name="name">
+      <Position>4</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="39" parent="9" name="employeeId">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="40" parent="9" name="createTime">
+      <Position>6</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="41" parent="9" name="extension">
+      <Position>7</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <index id="42" parent="9" name="fk_file_employee1_idx">
+      <ColNames>employeeId</ColNames>
+    </index>
+    <key id="43" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="44" parent="9" name="fk_file_employee1">
+      <ColNames>employeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="45" parent="10" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="46" parent="10" name="name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="47" parent="10" name="managerEmloyeeId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="48" parent="10" name="fk_group_employee1_idx">
+      <ColNames>managerEmloyeeId</ColNames>
+    </index>
+    <key id="49" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="50" parent="10" name="fk_group_employee1">
+      <ColNames>managerEmloyeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="51" parent="11" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="52" parent="11" name="roleId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="53" parent="11" name="routeId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="54" parent="11" name="fk_permission_role1_idx">
+      <ColNames>roleId</ColNames>
+    </index>
+    <index id="55" parent="11" name="fk_permission_route1_idx">
+      <ColNames>routeId</ColNames>
+    </index>
+    <key id="56" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="57" parent="11" name="fk_permission_role1">
+      <ColNames>roleId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>role</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="58" parent="11" name="fk_permission_route1">
+      <ColNames>routeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>route</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="59" parent="12" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="60" parent="12" name="name">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="61" parent="12" name="description">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <key id="62" parent="12" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="63" parent="13" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="64" parent="13" name="name">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="65" parent="13" name="method">
+      <Position>3</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="66" parent="13" name="route">
+      <Position>4</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <key id="67" parent="13" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="68" parent="14" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="69" parent="14" name="endpoint">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="70" parent="14" name="tokenKey">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="71" parent="14" name="tokenId">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="72" parent="14" name="fk_subcribe_token1_idx">
+      <ColNames>tokenId</ColNames>
+    </index>
+    <key id="73" parent="14" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="74" parent="14" name="fk_subcribe_token1">
+      <ColNames>tokenId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>token</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="75" parent="15" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="76" parent="15" name="name">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="77" parent="15" name="groupId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="78" parent="15" name="leaderEmployeeId">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="79" parent="15" name="fk_team_employee1_idx">
+      <ColNames>leaderEmployeeId</ColNames>
+    </index>
+    <index id="80" parent="15" name="fk_team_group1_idx">
+      <ColNames>groupId</ColNames>
+    </index>
+    <key id="81" parent="15" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="82" parent="15" name="fk_team_group1">
+      <ColNames>groupId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="83" parent="15" name="fk_team_employee1">
+      <ColNames>leaderEmployeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="84" parent="16" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="85" parent="16" name="content">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="86" parent="16" name="subject">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="87" parent="16" name="createEmployeeId">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="88" parent="16" name="status">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="89" parent="16" name="priority">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="90" parent="16" name="deadline">
+      <Position>7</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="91" parent="16" name="assignedEmployeeId">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="92" parent="16" name="rating">
+      <Position>9</Position>
+      <DataType>tinyint(1)|0</DataType>
+    </column>
+    <column id="93" parent="16" name="groupId">
+      <Position>10</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="94" parent="16" name="resolvedTime">
+      <Position>11</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="95" parent="16" name="closedTime">
+      <Position>12</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="96" parent="16" name="createdTime">
+      <Position>13</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="97" parent="16" name="updatedTime">
+      <Position>14</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <column id="98" parent="16" name="deletedTime">
+      <Position>15</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <index id="99" parent="16" name="fk_ticket_employee1_idx">
+      <ColNames>assignedEmployeeId</ColNames>
+    </index>
+    <index id="100" parent="16" name="fk_ticket_employee2_idx">
+      <ColNames>createEmployeeId</ColNames>
+    </index>
+    <index id="101" parent="16" name="fk_ticket_group1_idx">
+      <ColNames>groupId</ColNames>
+    </index>
+    <key id="102" parent="16" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="103" parent="16" name="fk_ticket_employee2">
+      <ColNames>createEmployeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="104" parent="16" name="fk_ticket_employee1">
+      <ColNames>assignedEmployeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="105" parent="16" name="fk_ticket_group1">
+      <ColNames>groupId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="106" parent="17" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="107" parent="17" name="status">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="108" parent="17" name="priority">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="109" parent="17" name="rating">
+      <Position>4</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="110" parent="17" name="reopened">
+      <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="111" parent="17" name="ticketId">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="112" parent="17" name="fk_ticketattribute_ticket1_idx">
+      <ColNames>ticketId</ColNames>
+    </index>
+    <key id="113" parent="17" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="114" parent="17" name="fk_ticketattribute_ticket1">
+      <ColNames>ticketId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>ticket</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="115" parent="18" name="ticketId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="116" parent="18" name="fielId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="117" parent="18" name="fk_ticketimage_file1_idx">
+      <ColNames>fielId</ColNames>
+    </index>
+    <key id="118" parent="18" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ticketId
+fielId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="119" parent="18" name="fk_ticketimage_ticket1">
+      <ColNames>ticketId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>ticket</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="120" parent="18" name="fk_ticketimage_file1">
+      <ColNames>fielId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>file</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="121" parent="19" name="ticketId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="122" parent="19" name="employeeId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="123" parent="19" name="status">
+      <Position>3</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <index id="124" parent="19" name="fk_ticketread_employee1_idx">
+      <ColNames>employeeId</ColNames>
+    </index>
+    <key id="125" parent="19" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ticketId
+employeeId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="126" parent="19" name="fk_ticketread_ticket">
+      <ColNames>ticketId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>ticket</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="127" parent="19" name="fk_ticketread_employee1">
+      <ColNames>employeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="128" parent="20" name="employeeId">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="129" parent="20" name="ticketId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="130" parent="20" name="fk_ticketrelater_ticket1_idx">
+      <ColNames>ticketId</ColNames>
+    </index>
+    <key id="131" parent="20" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>employeeId
+ticketId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="132" parent="20" name="fk_ticketrelater_employee1">
+      <ColNames>employeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="133" parent="20" name="fk_ticketrelater_ticket1">
+      <ColNames>ticketId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>ticket</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="134" parent="21" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="135" parent="21" name="ticketId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="136" parent="21" name="employeeId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="137" parent="21" name="content">
+      <Position>4</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="138" parent="21" name="type">
+      <Position>5</Position>
+      <DataType>tinyint(1)|0</DataType>
+    </column>
+    <column id="139" parent="21" name="createTime">
+      <Position>6</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="140" parent="21" name="updateTime">
+      <Position>7</Position>
+      <DataType>datetime|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="141" parent="21" name="fk_ticketthread_employee1_idx">
+      <ColNames>employeeId</ColNames>
+    </index>
+    <index id="142" parent="21" name="fk_ticketthread_ticket1_idx">
+      <ColNames>ticketId</ColNames>
+    </index>
+    <key id="143" parent="21" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="144" parent="21" name="fk_ticketthread_ticket1">
+      <ColNames>ticketId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>ticket</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="145" parent="21" name="fk_ticketthread_employee1">
+      <ColNames>employeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="146" parent="22" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="147" parent="22" name="userId">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="148" parent="22" name="tokenKey">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="149" parent="22" name="expriedTime">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+    </column>
+    <index id="150" parent="22" name="fk_token_user1_idx">
+      <ColNames>userId</ColNames>
+    </index>
+    <key id="151" parent="22" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="152" parent="22" name="fk_token_user1">
+      <ColNames>userId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="153" parent="23" name="userName">
+      <Position>1</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="154" parent="23" name="passWord">
+      <Position>2</Position>
+      <DataType>varchar(1000)|0</DataType>
+    </column>
+    <column id="155" parent="23" name="employeeId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="156" parent="23" name="id">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <index id="157" parent="23" name="fk_user_employee1_idx">
+      <ColNames>employeeId</ColNames>
+    </index>
+    <key id="158" parent="23" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="159" parent="23" name="fk_user_employee1">
+      <ColNames>employeeId</ColNames>
+      <RefSchemaName>btl</RefSchemaName>
+      <RefTableName>employee</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>
