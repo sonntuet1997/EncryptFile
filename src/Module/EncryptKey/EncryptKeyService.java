@@ -46,7 +46,6 @@ public class EncryptKeyService {
 
     public CryptoEntity encrypt(CryptoEntity cryptoEntity) {
         try {
-BouncyCastleProvider
             Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");
             InputStream inputStream = new ByteArrayInputStream(cryptoEntity.certificate.getBytes(Charset.forName("UTF-8")));
             CertificateFactory fact = CertificateFactory.getInstance("X.509");
