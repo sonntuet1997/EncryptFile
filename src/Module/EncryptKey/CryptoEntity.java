@@ -12,6 +12,7 @@ public class CryptoEntity implements Serializable {
     public String certificate;
     public String privateKey;
     public String data;
+    public String sign;
     public CryptoEntity() {
     }
 }

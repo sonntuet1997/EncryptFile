@@ -31,13 +31,6 @@ public class EncryptKeyService {
 
     public EncryptKeyService() {
         Security.addProvider(new BouncyCastleProvider());
-
-//        if (factory == null || currentActive != DatabaseEntity.Active) {
-//            IDatabaseService databaseService = new DatabaseService();
-//            IDatabaseControllService databaseControllService = new DatabaseControllService();
-//            factory = databaseControllService.createConfiguration(databaseService.get(DatabaseEntity.Active)).buildSessionFactory();
-//            currentActive = DatabaseEntity.Active;
-//        }
     }
 
     public static void setFactory(SessionFactory factory) {
@@ -56,8 +49,8 @@ public class EncryptKeyService {
                     .getBytes(StandardCharsets.UTF_8));
             cryptoEntity.data = encryptKey(key, cryptoEntity.data);
             return cryptoEntity;
-
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -87,8 +80,8 @@ public class EncryptKeyService {
             KeyFactory kf = KeyFactory.getInstance("EC");
             PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(cryptoEntity.privateKey));
             PrivateKey privKey = kf.generatePrivate(keySpecPKCS8);
-            Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");
-            ecdsaSign.initSign(privKey);
+//            Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");
+//            ecdsaSign.initSign(privKey);
             cryptoEntity.data = decryptKey(privKey, cryptoEntity.data);
             return cryptoEntity;
         } catch (Exception e) {
@@ -111,5 +104,39 @@ public class EncryptKeyService {
         iesCipher.init(Cipher.DECRYPT_MODE, privateKey, params);
         byte[] plaintext = iesCipher.doFinal(Base64.getDecoder().decode(encryptedKey.getBytes()));
         return new String(plaintext);
+    }
+
+    public CryptoEntity sign(CryptoEntity cryptoEntity) {
+        try {
+            cryptoEntity.privateKey = cryptoEntity.privateKey.replaceAll("[\\r\\n]", "").replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "");
+            KeyFactory kf = KeyFactory.getInstance("EC");
+            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(cryptoEntity.privateKey));
+            PrivateKey privKey = kf.generatePrivate(keySpecPKCS8);
+            Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");
+            ecdsaSign.initSign(privKey);
+            ecdsaSign.update(cryptoEntity.data.getBytes(StandardCharsets.UTF_8));
+            byte[] realSig = ecdsaSign.sign();
+            cryptoEntity.sign = Base64.getEncoder().encodeToString(realSig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cryptoEntity;
+    }
+
+    public boolean verify(CryptoEntity cryptoEntity) {
+        try {
+            Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");
+            InputStream inputStream = new ByteArrayInputStream(cryptoEntity.certificate.getBytes(Charset.forName("UTF-8")));
+            CertificateFactory fact = CertificateFactory.getInstance("X.509");
+            X509Certificate cer = (X509Certificate) fact.generateCertificate(inputStream);
+            PublicKey key = cer.getPublicKey();
+            ecdsaSign.initVerify(key);
+            ecdsaSign.update(cryptoEntity.data.getBytes(StandardCharsets.UTF_8));
+            boolean c = ecdsaSign.verify(Base64.getDecoder().decode(cryptoEntity.sign.getBytes()));
+            return c;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

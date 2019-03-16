@@ -6,6 +6,7 @@ import Manager.Service.DatabaseControllService;
 import Manager.Service.DatabaseService;
 import Module.EncryptFile.EncryptFileService;
 import Module.EncryptKey.EncryptKeyService;
+import Module.File.FileService;
 import Module.KeyShare.KeyShareService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
@@ -17,5 +18,6 @@ public class ApplicationBinder extends AbstractBinder {
         bind(new KeyShareService()).to(KeyShareService.class);
         bind(new EncryptFileService()).to(EncryptFileService.class);
         bind(new EncryptKeyService()).to(EncryptKeyService.class);
+        bind(new FileService()).to(FileService.class);
     }
 }

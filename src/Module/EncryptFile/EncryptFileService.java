@@ -32,7 +32,7 @@ public class EncryptFileService {
             Cipher ecipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
             ecipher.init(Cipher.ENCRYPT_MODE, skeySpec, paramSpec);
-            // Bytes written to out will be encrypted
+            // Bytes written to out will be message
             out = new CipherOutputStream(out, ecipher);
             // Read in the cleartext bytes and write to out to encryptAndHash
             int numRead = 0;

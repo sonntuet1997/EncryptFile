@@ -1,64 +1,84 @@
-//package Module.File;
-//
-//import javax.inject.Inject;
-//import javax.ws.rs.*;
-//import javax.ws.rs.core.MediaType;
-//import java.util.List;
-//
-//@Path("/files")
-//public class FileController {
-//    @Inject
-//    private FileService fileService;
-//
-//    public FileController() {
-//
-//    }
-//
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public FileEntity get() {
-////    public List<KeyShareEntity> get(@BeanParam SearchFileModel searchFileModel) {
-//        return new FileEntity();
-////        return fileService.get(searchFileModel);
-//    }
-//
-////    @GET
-////    @Consumes(MediaType.APPLICATION_JSON)
-////    @Path("/Count")
-////    public int count(@BeanParam SearchFileModel searchFileModel) {
-////        return 100;
-////    }
-////
-////    @GET
-////    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_JSON)
-////    @Path("{fileId}")
-////    public KeyShareEntity getId(@PathParam("fileId") int fileId) {
-////        return fileService.get(fileId);
-////    }
-////
-////    @POST
-////    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_JSON)
-////    public KeyShareEntity encryptAndHash(KeyShareEntity fileEntity) {
-////        return fileService.encryptAndHash(fileEntity);
-////    }
-//
-////    @PUT
-////    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_JSON)
-////    @Path("{fileId}")
-////    public KeyShareEntity update(@PathParam("fileId") int fileId, KeyShareEntity fileEntity) {
-////        return fileService.update(fileId, fileEntity);
-////    }
-////
-////    @DELETE
-////    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_JSON)
-////    @Path("{fileId}")
-////    public void delete(@PathParam("fileId") int fileId) {
-////        fileService.delete(fileId);
-////    }
-//
-//}
+package Module.File;
+
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.InputStream;
+
+@Path("/files")
+public class FileController {
+    @Inject
+    private FileService fileService;
+
+    public FileController() {
+
+    }
+
+    @POST
+    @Path("cleanFolder")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cleanFolder() {
+        this.fileService.cleanFolder();
+        //TODO: Check version
+        //TODO: ......
+    }
+
+    @POST
+    @Path("upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public EncryptFileEntity upload(
+            @FormDataParam("json") FormDataBodyPart json,
+            @FormDataParam("data") FormDataBodyPart content,
+            @FormDataParam("data") FormDataContentDisposition contentDisposition,
+            @FormDataParam("data") final InputStream input) throws Exception {
+        //TODO: Check version
+        //TODO: Check type
+        json.setMediaType(MediaType.APPLICATION_JSON_TYPE);
+        FileEntity fileEntity = json.getValueAs(FileEntity.class);
+        this.fileService.upload(fileEntity, content, contentDisposition, input);
+//    public List<KeyShareEntity> get(@BeanParam SearchFileModel searchFileModel) {
+        return new EncryptFileEntity();
+//        return fileService.get(searchFileModel);
+    }
+
+    @POST
+    @Path("download")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces({MediaType.APPLICATION_OCTET_STREAM})
+    public Response download(
+            @FormDataParam("json") FormDataBodyPart json,
+            @FormDataParam("data") FormDataBodyPart content,
+                                      @FormDataParam("data") FormDataContentDisposition contentDisposition,
+                                      @FormDataParam("data") final InputStream input) {
+        json.setMediaType(MediaType.APPLICATION_JSON_TYPE);
+        FileEntity fileEntity = json.getValueAs(FileEntity.class);
+        StreamingOutput streamingOutput = outputStream -> {
+            try {
+                this.fileService.download(fileEntity,outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+        return Response.ok(streamingOutput).header("Content-Disposition",
+                "attachment; filename=1").build();
+        //TODO: Send signature = Increased Number,
+        //TODO: Check permission
+        //TODO: Get File
+        //TODO: Decrypt If needed
+
+
+//    public List<KeyShareEntity> get(@BeanParam SearchFileModel searchFileModel) {
+//        return fileService.get(searchFileModel);
+    }
+}

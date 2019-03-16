@@ -24,6 +24,14 @@ public class EncryptKeyController {
     }
 
     @POST
+    @Path("sign")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public CryptoEntity sign(CryptoEntity cryptoEntity) {
+        return encryptKeyService.sign(cryptoEntity);
+    }
+
+    @POST
     @Path("encrypt-all")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -37,5 +45,13 @@ public class EncryptKeyController {
     @Consumes(MediaType.APPLICATION_JSON)
     public CryptoEntity decrypt(CryptoEntity cryptoEntity) {
         return encryptKeyService.decrypt(cryptoEntity);
+    }
+
+    @POST
+    @Path("verify")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean verify(CryptoEntity cryptoEntity) {
+        return encryptKeyService.verify(cryptoEntity);
     }
 }
