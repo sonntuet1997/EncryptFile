@@ -5,7 +5,7 @@ services:
       context: ./
     image: file-service
     environment:
-    - COMPOSER_CARD=Server1@composer
+    - COMPOSER_CARD=Server4@composer
     - COMPOSER_NAMESPACES=never
     - COMPOSER_AUTHENTICATION=false
     - COMPOSER_MULTIUSER=false
@@ -22,6 +22,6 @@ services:
     - ./btl:/usr/local/tomcat/webapps/ROOT
     - ./files:/usr/local/tomcat/files
     - ~/.composer:/root/.composer/
-    command: sh -c 'catalina.sh jpda start & composer-rest-server'
+    command: sh -c 'catalina.sh run | composer-rest-server'
 #        - ~/composer/packages/composer-rest-server:/home/composer-rest-server
     container_name: file-service

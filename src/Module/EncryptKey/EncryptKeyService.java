@@ -123,6 +123,10 @@ public class EncryptKeyService {
         return cryptoEntity;
     }
 
+    public CryptoEntity test(String file) {
+        return null;
+    }
+
     public boolean verify(CryptoEntity cryptoEntity) {
         try {
             Signature ecdsaSign = Signature.getInstance("SHA256withECDSA");

@@ -140,7 +140,6 @@ public class FileService {
         } else {
             throw new Exception("error 7");
         }
-
     }
 
     public void cleanFolder() {

@@ -1,14 +1,19 @@
 package Module.EncryptFile;
 
+import Module.EncryptKey.CryptoEntity;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Random;
+
+import static Module.EncryptFile.Encryptor.encryptFileService;
 
 /**
  * Created by Son on 6/15/2017.
@@ -64,6 +69,18 @@ public class EncryptFileService {
             }
             out.close();
         } catch (Exception ignored) {
+        }
+    }
+
+    public void test(String file) {
+        byte[] key = getRandomKey();
+        InputStream inputStream = null;
+        try {
+            inputStream = Files.newInputStream(Paths.get(file));
+            PrintStream ps = new PrintStream(System.out,true,"UTF8");
+            encryptFileService.encryptAndHash(inputStream,key,ps);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
