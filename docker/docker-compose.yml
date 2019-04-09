@@ -5,7 +5,7 @@ services:
       context: ./
     image: file-service
     environment:
-    - COMPOSER_CARD=Server4@composer
+    - COMPOSER_CARD=Server1.1@composer
     - COMPOSER_NAMESPACES=never
     - COMPOSER_AUTHENTICATION=false
     - COMPOSER_MULTIUSER=false
