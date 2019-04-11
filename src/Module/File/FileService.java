@@ -24,7 +24,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,16 +69,24 @@ public class FileService {
         FileEntity readValue = mapper.readValue(cryptoEntity.data, FileEntity.class);
         String[] s = fileEntity.src.split("/");
         s[s.length - 1] = s[s.length - 1] + fileEntity.hash;
-        String pathFile = String.join("/", s);
-        File file = new File(this.filePath + "/" + pathFile);
+        String[] path = readValue.src.split("/");
+        for (int i = 0; i < path.length; i++){
+            path[i] = UriUtils.encodePath(path[i], StandardCharsets.UTF_8.name());
+        }
+        File file = new File(this.filePath + String.join("/",path) + readValue.hash);
         if (file.exists()) throw new Exception("error 5");
-        List<Identity> identities = mapper.readValue(new URL(this.restUrl + "/api/system/identities"), new TypeReference<List<Identity>>() {
-        });
+        List<Identity> identities;
+        try {
+            identities = mapper.readValue(new URL(this.restUrl + "/api/system/identities"), new TypeReference<List<Identity>>() {
+            });
+        } catch (ConnectException  e){
+            throw new Exception("error  40");
+        }
         Identity identity = identities.parallelStream().filter(x -> x.certificate.equals(fileEntity.certificate) && x.state.equals("ACTIVATED")).findFirst().orElse(null);
         if (identity == null) throw new Exception("error 16");
-        List<FileEncrypted> ff = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted"), new TypeReference<List<FileEncrypted>>() {
+              String urlFile = String.join("%2F",path);
+        FileEncrypted blockchainInfo = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted/" + urlFile), new TypeReference<FileEncrypted>() {
         });
-        FileEncrypted blockchainInfo = ff.stream().filter(x -> x.uid.equals(readValue.src)).findFirst().orElse(null);
         if (blockchainInfo == null) throw new Exception("error 3");
         if (blockchainInfo.checksum.equals(readValue.hash) || Arrays.asList(blockchainInfo.propose_list).parallelStream().anyMatch(c -> c.proposing_file.checksum.equals(readValue.hash))) {
             file.getParentFile().mkdirs();
@@ -100,10 +111,13 @@ public class FileService {
         if (!this.encryptKeyService.verify(cryptoEntity)) throw new Exception("error 2");
         ObjectMapper mapper = new ObjectMapper();
         FileEntity readValue = mapper.readValue(cryptoEntity.data, FileEntity.class);
-
-        List<FileEncrypted> ff = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted"), new TypeReference<List<FileEncrypted>>() {
+        String[] path = readValue.src.split("/");
+        for (int i = 0; i < path.length; i++){
+            path[i] = UriUtils.encodePath(UriUtils.encodePath(path[i], StandardCharsets.UTF_8.name()), StandardCharsets.UTF_8.name());
+        }
+        String urlFile = String.join("%2F",path);
+        FileEncrypted blockchainInfo = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted/" + urlFile), new TypeReference<FileEncrypted>() {
         });
-        FileEncrypted blockchainInfo = ff.stream().filter(x -> x.uid.equals(readValue.src)).findFirst().orElse(null);
         if (blockchainInfo == null) throw new Exception("error 3");
         if (blockchainInfo.checksum.equals(readValue.hash) || Arrays.asList(blockchainInfo.propose_list).parallelStream().anyMatch(c -> c.proposing_file.checksum.equals(readValue.hash))) {
             List<Identity> identities = mapper.readValue(new URL(this.restUrl + "/api/system/identities"), new TypeReference<List<Identity>>() {
@@ -121,7 +135,7 @@ public class FileService {
                     .filter(s -> cryptoList.parallelStream()
                             .anyMatch(k -> k.issuer.equals(s))).count() >= blockchainInfo.control_info.thresh_hold);
             if (!check) throw new Exception("error 18");
-            File file = new File(this.filePath + "/" + readValue.src + readValue.hash);
+            File file = new File(this.filePath + String.join("/",path) + readValue.hash);
             if (!file.exists()) throw new Exception("error 9");
             JSONObject obj = new JSONObject();
             obj.put("user",identity.participant);
