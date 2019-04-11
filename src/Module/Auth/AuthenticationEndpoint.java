@@ -88,7 +88,7 @@ public class AuthenticationEndpoint {
 //    private UserEntity authenticate(String username, String password) throws Exception {
 //        UserEntity userEntity = userService.getByUserName(username);
 //        if (userEntity == null || !userEntity.passWord.equals(password))
-//            throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
+//            throw new CustomException(400,"Tên đăng nhập hoặc mật khẩu không đúng");
 //        else return userEntity;
 //    }
 

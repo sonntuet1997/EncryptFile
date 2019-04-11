@@ -6,6 +6,7 @@ import Module.ComposerModel.FileEncrypted;
 import Module.ComposerModel.Identity;
 import Module.EncryptKey.CryptoEntity;
 import Module.EncryptKey.EncryptKeyService;
+import Module.Exception.CustomException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
@@ -64,7 +65,7 @@ public class FileService {
         cryptoEntity.certificate = fileEntity.certificate;
         cryptoEntity.sign = fileEntity.sign;
         cryptoEntity.data = fileEntity.message;
-        if (!this.encryptKeyService.verify(cryptoEntity)) throw new Exception("error 2");
+        if (!this.encryptKeyService.verify(cryptoEntity)) throw new CustomException(400,"error 2");
         ObjectMapper mapper = new ObjectMapper();
         FileEntity readValue = mapper.readValue(cryptoEntity.data, FileEntity.class);
         String[] s = fileEntity.src.split("/");
@@ -74,25 +75,25 @@ public class FileService {
             path[i] = UriUtils.encodePath(path[i], StandardCharsets.UTF_8.name());
         }
         File file = new File(this.filePath + String.join("/",path) + readValue.hash);
-        if (file.exists()) throw new Exception("error 5");
+        if (file.exists()) throw new CustomException(400,"error 5");
         List<Identity> identities;
         try {
             identities = mapper.readValue(new URL(this.restUrl + "/api/system/identities"), new TypeReference<List<Identity>>() {
             });
         } catch (ConnectException  e){
-            throw new Exception("error  40");
+            throw new CustomException(400,"error  40");
         }
         Identity identity = identities.parallelStream().filter(x -> x.certificate.equals(fileEntity.certificate) && x.state.equals("ACTIVATED")).findFirst().orElse(null);
-        if (identity == null) throw new Exception("error 16");
+        if (identity == null) throw new CustomException(400,"error 16");
               String urlFile = String.join("%2F",path);
         FileEncrypted blockchainInfo = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted/" + urlFile), new TypeReference<FileEncrypted>() {
         });
-        if (blockchainInfo == null) throw new Exception("error 3");
+        if (blockchainInfo == null) throw new CustomException(400,"error 3");
         if (blockchainInfo.checksum.equals(readValue.hash) || Arrays.asList(blockchainInfo.propose_list).parallelStream().anyMatch(c -> c.proposing_file.checksum.equals(readValue.hash))) {
             file.getParentFile().mkdirs();
             FileUtils.copyInputStreamToFile(input, file);
         } else {
-            throw new Exception("error 7");
+            throw new CustomException(400,"error 7");
         }
         //TODO: Check version
         //TODO: Check type
@@ -108,7 +109,7 @@ public class FileService {
         cryptoEntity.certificate = fileEntity.certificate;
         cryptoEntity.sign = fileEntity.sign;
         cryptoEntity.data = fileEntity.message;
-        if (!this.encryptKeyService.verify(cryptoEntity)) throw new Exception("error 2");
+        if (!this.encryptKeyService.verify(cryptoEntity)) throw new CustomException(400,"error 2");
         ObjectMapper mapper = new ObjectMapper();
         FileEntity readValue = mapper.readValue(cryptoEntity.data, FileEntity.class);
         String[] path = readValue.src.split("/");
@@ -118,15 +119,15 @@ public class FileService {
         String urlFile = String.join("%2F",path);
         FileEncrypted blockchainInfo = mapper.readValue(new URL(this.restUrl + "/api/FileEncrypted/" + urlFile), new TypeReference<FileEncrypted>() {
         });
-        if (blockchainInfo == null) throw new Exception("error 3");
+        if (blockchainInfo == null) throw new CustomException(400,"error 3");
         if (blockchainInfo.checksum.equals(readValue.hash) || Arrays.asList(blockchainInfo.propose_list).parallelStream().anyMatch(c -> c.proposing_file.checksum.equals(readValue.hash))) {
             List<Identity> identities = mapper.readValue(new URL(this.restUrl + "/api/system/identities"), new TypeReference<List<Identity>>() {
             });
             Identity identity = identities.parallelStream().filter(x -> x.certificate.equals(fileEntity.certificate) && x.state.equals("ACTIVATED")).findFirst().orElse(null);
-            if (identity == null) throw new Exception("error 16");
+            if (identity == null) throw new CustomException(400,"error 16");
             AccessInfo accessInfo = Arrays.stream(blockchainInfo.access_info_list).filter(t -> t.user.equals(identity.participant)).findFirst().orElse(null);
             if (accessInfo == null) {
-                throw new Exception("error 17");
+                throw new CustomException(400,"error 17");
             }
             List<Crypto> cryptoList = Arrays.stream(accessInfo.crypto_list).filter(t -> t.identity.equals("resource:org.hyperledger.composer.system.Identity#" + identity.identityId)).collect(Collectors.toList());
             boolean check = Arrays.stream(blockchainInfo.control_info.required_list)
@@ -134,9 +135,9 @@ public class FileService {
             check = check && (Arrays.stream(blockchainInfo.control_info.optional_list)
                     .filter(s -> cryptoList.parallelStream()
                             .anyMatch(k -> k.issuer.equals(s))).count() >= blockchainInfo.control_info.thresh_hold);
-            if (!check) throw new Exception("error 18");
+            if (!check) throw new CustomException(400,"error 18");
             File file = new File(this.filePath + String.join("/",path) + readValue.hash);
-            if (!file.exists()) throw new Exception("error 9");
+            if (!file.exists()) throw new CustomException(400,"error 9");
             JSONObject obj = new JSONObject();
             obj.put("user",identity.participant);
             obj.put("file", "resource:file.FileEncrypted#" + blockchainInfo.uid);
@@ -150,9 +151,9 @@ public class FileService {
             HttpResponse response = httpClient.execute(request);
             if(response.getStatusLine().getStatusCode() == 200){
                 IOUtils.copy(new FileInputStream(file), outputStream);
-            } else throw new Exception("error 19");
+            } else throw new CustomException(400,"error 19");
         } else {
-            throw new Exception("error 7");
+            throw new CustomException(400,"error 7");
         }
     }
 
